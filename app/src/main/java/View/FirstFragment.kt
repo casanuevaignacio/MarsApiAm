@@ -1,5 +1,6 @@
 package View
-
+import androidx.fragment.app.activityViewModels
+import com.example.marsapiam.R
 import ViewModel.MarsViewModel
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +18,11 @@ class FirstFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MarsViewModel by viewModels()
+    // Cambia esto:// private val viewModel: MarsViewModel by viewModels()
+
+    // Por esto (necesitas el import de fragment-ktx):
+    // Reemplaza la línea del viewModel por esta:
+    private val viewModel: MarsViewModel by activityViewModels()
 
     private lateinit var adapter: MarsAdapter
 
@@ -32,27 +37,31 @@ class FirstFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState) // Añadido super
 
         adapter = MarsAdapter()
-        adapter.setOnItemClickListener {
-            //guarda el terreno seleccionado
-            terrain -> viewModel.selected(terrain)
-            //pasamos al segundo fragmento
-            Log.d("CLICK","Has seleccionado: ${terrain.id}")
 
-
-        }
-
-
-        binding.rvTerrains.layoutManager =
-            LinearLayoutManager(requireContext())
-
+        binding.rvTerrains.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTerrains.adapter = adapter
 
-        // OBSERVAR ROOM
+        // --- CONFIGURAR EL CLICK PARA NAVEGAR ---
+        adapter.setOnItemClickListener { terrain ->
+            // 1. Guardar en el ViewModel compartido
+            viewModel.selected(terrain)
+
+            Log.d("CLICK", "Terreno seleccionado: ${terrain.id}")
+
+            // 2. Navegar usando la vista actual de forma segura
+            view?.let {
+                androidx.navigation.Navigation.findNavController(it).navigate(
+                    R.id.action_FirstFragment_to_SecondFragment
+                )
+            }
+        }
+
+        // OBSERVAR DATOS DE ROOM
         viewModel.allTerrains.observe(viewLifecycleOwner) { lista ->
             if (lista != null && lista.isNotEmpty()) {
-                // AQUÍ pasas los datos a tu adaptador
                 adapter.setData(lista)
                 Log.d("UI_DEBUG", "La lista contiene ${lista.size} elementos")
             } else {
@@ -60,7 +69,6 @@ class FirstFragment : Fragment() {
             }
         }
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
