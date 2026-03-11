@@ -2,18 +2,10 @@ package Model.Local
 
 import Model.Remote.MarsRealState
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
-
-// 2do paso
 @Dao
 interface MarsDao {
-
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTerrain(terrain: MarsRealState)
@@ -30,30 +22,15 @@ interface MarsDao {
     @Query("DELETE FROM mars_table")
     suspend fun deleteAll()
 
-    //traer todo los terrenos
-
+    // traer todos los terrenos
     @Query("SELECT * FROM mars_table ORDER BY id DESC")
     fun getAllTerrains(): LiveData<List<MarsRealState>>
 
-    //filtrar por titutlo
-
+    // filtrar por tipo
     @Query("SELECT * FROM mars_table WHERE type = :type LIMIT 1")
     fun getTerrainByType(type: String): LiveData<MarsRealState>
 
-    //FILTRAR POR ID
-
+    // filtrar por id (corregido)
     @Query("SELECT * FROM mars_table WHERE id = :id")
     fun getTerrainById(id: String): LiveData<MarsRealState>
-
-
-
-
-
-
-
-
-
-
-
-
 }

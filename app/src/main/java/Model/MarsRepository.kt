@@ -9,73 +9,64 @@ import androidx.lifecycle.MutableLiveData
 
 class MarsRepository(private val marsDao: MarsDao) {
 
-    //llama al metodo conexio
-
-
     private val retrofitClient = RetrofitClient.getRetrofit()
-
-    //hace referencia al pojo y la respues q vamos a recibir
 
     val dataFromInternet = MutableLiveData<List<MarsRealState>>()
 
-
-    suspend fun fetchDataFromInternetCoroutines(){
+    suspend fun fetchDataFromInternetCoroutines() {
 
         try {
+
             val response = retrofitClient.fetchMarsDatacCoroutines()
 
-            when(response.code()){
+            when (response.code()) {
 
-                in 200..299 -> response.body()?.let {
+                in 200..299 -> response.body()?.let { terrains ->
 
-                    if (it!= null){
-                        marsDao.insertAllTerrains(it)
-                    }
+                    //guardar en Room
+                    marsDao.insertAllTerrains(terrains)
+
+                    //enviar datos al LiveData
+                    dataFromInternet.postValue(terrains)
                 }
 
-                in 300..301 -> Log.d("REPO", "${response.code()} --- ${response.errorBody()}")
+                in 300..399 ->
+                    Log.d("REPO", "${response.code()} --- ${response.errorBody()}")
 
-                else -> Log.d("REPO", "${response.code()} --- ${response.errorBody().toString()}")
+                else ->
+                    Log.d("REPO", "${response.code()} --- ${response.errorBody()}")
 
+            }
 
-                }
+        } catch (t: Throwable) {
 
-            }catch (t: Throwable){
-                Log.e("REPO", "${t.message}")
+            Log.e("REPO", "${t.message}")
 
         }
     }
 
-
-    fun getMarsByid(id: Int): LiveData<MarsRealState> {
-        return getMarsByid(id)
+    //obtener por id
+    fun getMarsByid(id: String): LiveData<MarsRealState> {
+        return marsDao.getTerrainById(id)
     }
 
-
-    val listAllTask: LiveData<List<MarsRealState>> = marsDao.getAllTerrains()
+    //lista desde Room
+    val listAllTask: LiveData<List<MarsRealState>> =
+        marsDao.getAllTerrains()
 
     suspend fun inserTerrain(terrain: MarsRealState) {
         marsDao.insertTerrain(terrain)
-
     }
 
     suspend fun updateTerrain(terrain: MarsRealState) {
         marsDao.updateTerrains(terrain)
-
     }
 
     suspend fun deleteTerrain(terrain: MarsRealState) {
         marsDao.deleteTerrain(terrain)
-
     }
 
-    suspend fun deleteAll() {
-        marsDao.deleteAll()
-
+    suspend fun updateAllTerrains(terrains: List<MarsRealState>) {
+        marsDao.insertAllTerrains(terrains)
     }
-
-
-
-
 }
-

@@ -5,16 +5,6 @@ import retrofit2.http.GET
 
 
 interface MarsApi {
-
-
-    @GET("realstate")
+    @GET("realestate")
     suspend fun fetchMarsDatacCoroutines(): Response<List<MarsRealState>>
-
-
-
-
-
-
-
-
 }
