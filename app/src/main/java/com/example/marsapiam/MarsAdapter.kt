@@ -12,6 +12,7 @@ import Model.Remote.MarsRealState
 
 class MarsAdapter : RecyclerView.Adapter<MarsAdapter.MarsViewHolder>() {
 
+
     private var marsList = mutableListOf<MarsRealState>()
 
     // 1. Agrega esta variable para el click
@@ -22,7 +23,7 @@ class MarsAdapter : RecyclerView.Adapter<MarsAdapter.MarsViewHolder>() {
         onItemClickListener = listener
     }
 
-    class MarsViewHolder(val binding: ItemMarsBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class MarsViewHolder(val binding: ItemMarsBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarsViewHolder {
         val binding = ItemMarsBinding.inflate(LayoutInflater.from(parent.context), parent, false)

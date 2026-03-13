@@ -18,10 +18,7 @@ class FirstFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
 
-    // Cambia esto:// private val viewModel: MarsViewModel by viewModels()
 
-    // Por esto (necesitas el import de fragment-ktx):
-    // Reemplaza la línea del viewModel por esta:
     private val viewModel: MarsViewModel by activityViewModels()
 
     private lateinit var adapter: MarsAdapter

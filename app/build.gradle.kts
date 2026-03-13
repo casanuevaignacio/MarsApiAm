@@ -77,5 +77,36 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
+    // testing instrumentales (Room +livedata)
+    androidTestImplementation("androidx.room:room-testing:$room_version")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+
+
+// livedata
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // Tests unitarios
+    testImplementation("junit:junit:4.13.2")
+
+    // web server
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
+    testImplementation("com.squareup.retrofit2:retrofit:2.11.0")
+    testImplementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation(kotlin("test"))
+
+    // Unit tests
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:5.3.1") // opcional
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
 
 }
